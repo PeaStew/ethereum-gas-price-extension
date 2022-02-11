@@ -21,15 +21,8 @@ function updateBadge() {
 
 function getProviderUrl(provider) {
   switch(provider) {
-    case 'ethgasstation':
-      // return "https://gasprice-proxy.herokuapp.com/"; // Firefox specific proxy
-      return "https://ethgasstation.info/api/ethgasAPI.json?api-key=d216b81e8ed8f5c8a82744be99b22b2d1757098f40df3c2ea5bb40b3912b";
-      break;
-    case 'gasnow':
-      return "https://www.gasnow.org/api/v3/gas/price?utm_source=EthGasPriceExtension";
-      break;
-    case 'ethgaswatch':
-      return "https://gasprice-proxy.herokuapp.com/provider/ethgaswatch";
+    case 'ftmscan':
+      return "https://gftm.blockscan.com/gasapi.ashx/gasoracle?apikey=key&method=gasoracle";
       break;
   }
 }
@@ -37,7 +30,7 @@ function getProviderUrl(provider) {
 function fetchGasPrice() {
   return new Promise((resolve, reject)=>{
     chrome.storage.sync.get({
-      provider: "ethgasstation",
+      provider: "ftmscan",
     }, function(items) {
       const url = getProviderUrl(items.provider);
 
@@ -60,65 +53,24 @@ function fetchGasPrice() {
 
 // Create a consistent structure for data so we can use multiple providers
 function parseApiData(apiData, provider) {
-  if(provider === "ethgasstation") {
-    return {
-      "slow": {
-        "gwei": parseInt(apiData.safeLow, 10)/10,
-        "wait": "~"+apiData.safeLowWait + " minutes"
-      },
-      "standard": {
-        "gwei": parseInt(apiData.average, 10)/10,
-        "wait": "~"+apiData.avgWait + " minutes"
-      },
-      "fast": {
-        "gwei": parseInt(apiData.fast, 10)/10,
-        "wait": "~"+apiData.fastWait + " minutes"
-      },
-      "rapid": {
-        "gwei": parseInt(apiData.fastest, 10)/10,
-        "wait": "~"+apiData.fastestWait + " minutes"
-      }
-    }
-  }
 
-  if(provider === "gasnow") {
+  if(provider === "ftmscan") {
     return {
       "slow": {
-        "gwei": Math.floor(parseInt(apiData.data.slow, 10)/1000000000),
-        "wait": ">10 minutes"
+        "gwei": parseFloat(apiData.SafeGasPrice),
+        "wait": ">60 seconds"
       },
       "standard": {
-        "gwei": Math.floor(parseInt(apiData.data.standard, 10)/1000000000),
-        "wait": "~3 minutes"
+        "gwei": parseFloat(apiData.ProposeGasPrice),
+        "wait": "30-60 seconds"
       },
       "fast": {
-        "gwei": Math.floor(parseInt(apiData.data.fast, 10)/1000000000),
-        "wait": "~1 minute"
+        "gwei": parseFloat(apiData.FastGasPrice),
+        "wait": "10-30 seconds"
       },
       "rapid": {
-        "gwei": Math.floor(parseInt(apiData.data.rapid, 10)/1000000000),
-        "wait": "~15 seconds"
-      }
-    }
-  }
-
-  if(provider === "ethgaswatch") {
-    return {
-      "slow": {
-        "gwei": parseInt(apiData.slow.gwei, 10),
-        "wait": "<30 minutes"
-      },
-      "standard": {
-        "gwei": parseInt(apiData.normal.gwei, 10),
-        "wait": "<5 minutes"
-      },
-      "fast": {
-        "gwei": parseInt(apiData.fast.gwei, 10),
-        "wait": "<2 minutes"
-      },
-      "rapid": {
-        "gwei": parseInt(apiData.instant.gwei, 10),
-        "wait": "few seconds"
+        "gwei": parseFloat(apiData.FastGasPrice),
+        "wait": "5-10 seconds"
       }
     }
   }
