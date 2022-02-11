@@ -1,4 +1,4 @@
-# Ethereum Gas Price Extension
+# Fantom Gas Price Extension
 Displays the latest gas price provided by [FTMScan](https://ftmscan.com/).
 
 To install [click here](TBD).
