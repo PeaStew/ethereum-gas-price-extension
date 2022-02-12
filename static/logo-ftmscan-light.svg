@@ -36,14 +36,14 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="3840"
-     inkscape:window-height="2107"
+     inkscape:window-width="5120"
+     inkscape:window-height="2076"
      id="namedview861"
      showgrid="false"
      inkscape:zoom="4.7064098"
      inkscape:cx="23.633143"
-     inkscape:cy="-7.26108"
-     inkscape:window-x="-8"
+     inkscape:cy="-7.1548419"
+     inkscape:window-x="3832"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="g857" />
@@ -57,7 +57,7 @@
        id="path841"
        style="fill:#13b5ec;fill-opacity:0.94117647" />
     <rect
-       style="fill:#001f68;fill-opacity:1"
+       style="fill:#12b6ec;fill-opacity:0.94117647"
        y="216"
        x="169"
        id="rect843"
@@ -72,13 +72,13 @@
          d="M 45.054,35.037 V 15.013 a 5.006,5.006 0 0 0 -2.5,-4.33 L 25.03,0.671 a 5.006,5.006 0 0 0 -5.006,0 L 2.5,10.683 A 5.006,5.006 0 0 0 0,15.013 v 20.024 a 5.006,5.006 0 0 0 2.5,4.33 L 20.024,49.38 a 5.006,5.006 0 0 0 5.006,0 L 42.551,39.367 a 5.006,5.006 0 0 0 2.503,-4.33 z"
          id="path845"
          inkscape:connector-curvature="0"
-         style="fill:#001f68;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+         style="fill:#12b6ec;fill-opacity:0.94117647;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
       <path
          d="M 0,0 21.851,12.64 43.7,0"
          transform="translate(0.676,12.41)"
          id="path847"
          inkscape:connector-curvature="0"
-         style="fill:#001f68;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+         style="fill:#12b6ec;fill-opacity:0.94117647;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
       <line
          y1="25.23"
          transform="translate(22.527,25.025)"

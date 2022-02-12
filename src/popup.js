@@ -56,7 +56,7 @@ function fetchGasPrice() {
 }
 
 function updateDom() {
-  document.getElementById("ftmprice").innerHTML = 'Price: ' + appData.gasData.price.currency + appData.gasData.price.symbol + appData.gasData.price.value;
+  document.getElementById("ftmprice").innerHTML = 'FTM/' + appData.gasData.price.currency + ': ' + appData.gasData.price.symbol + appData.gasData.price.value;
   document.getElementById("ftmlastblock").innerHTML = 'Block: ' + appData.gasData.blockchain.lastblock;
   document.getElementById("standardname").innerHTML = appData.gasData.standard.name;
   document.getElementById("fastname").innerHTML = appData.gasData.fast.name;
@@ -110,7 +110,7 @@ function changeColor(background,fontcolor,buttonText,theme, imgsrc) {
   var ftmscanlogo = document.getElementById("ftmscanlogo");
   document.body.style.background = background;
         document.body.style.color = fontcolor;
-        themeButton.className = "btn btn-" + buttonText;
+        themeButton.className = "btn btn-" + buttonText + "-fantom";
         ftmscanlogo.src = imgsrc;
         // x.innerHTML = buttonText;
         chrome.storage.sync.set({"theme": theme});  
