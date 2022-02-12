@@ -8,10 +8,10 @@ Feel free to contribute any code or fork this project. If you have ideas, open u
 
 ## Screen Shots
 
-# Themes (activated by clicking on small button in bottom right hand corner)
-Dark Theme 
+### Themes (activated by clicking on small button in bottom right hand corner)
+#### Dark Theme 
 ![image](https://user-images.githubusercontent.com/34198053/153711080-3d684abd-f585-45d0-b08b-fb863e65b4e6.png)
-Light Theme
+#### Light Theme
 ![image](https://user-images.githubusercontent.com/34198053/153711114-dfebcfe8-9782-4cfa-80d2-5e0b21582dbb.png)
 
 ## Donating
