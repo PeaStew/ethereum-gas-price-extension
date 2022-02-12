@@ -127,76 +127,14 @@ body {
 	color: #444;
 }
 
-/* light button */
-
-.btn-light-fantom {
-	color: #000;
-	background-color: #13b5ecff;
-	border-color: #13b5ecff
-}
-
-.btn-light-fantom:hover {
-	color: #000;
-	background-color: #13b5ecff;
-	border-color: #13b5ecff;
-	box-shadow: 0 0 0 .1rem rgba(255,255,255, 1);
-}
-
-.btn-check:focus+.btn-light-fantom, .btn-light-fantom:focus {
-	color: #000;
-	background-color: #13b5ecff;
-	border-color: #13b5ecff;	
-}
-
-.btn-check:active+.btn-light-fantom, .btn-check:checked+.btn-light-fantom, .btn-light-fantom.active, .btn-light-fantom:active, .show>.btn-light-fantom.dropdown-toggle {
-	color: #000;
-	background-color: #13b5ecff;
-	border-color: #13b5ecff
-}
-
-/* .btn-check:active+.btn-light-fantom:focus, .btn-check:checked+.btn-light-fantom:focus, .btn-light-fantom.active:focus, .btn-light-fantom:active:focus, .show>.btn-light-fantom.dropdown-toggle:focus {
-	box-shadow: 0 0 0 .1rem rgba(255, 255, 255, 1)
-} */
-
-.btn-light-fantom.disabled, .btn-light-fantom:disabled {
-	color: #000;
-	background-color: #13b5ecff;
-	border-color: #13b5ecff
-}
-
-/* dark */
-
-.btn-dark-fantom {
-	color: #fff;
-	background-color: #000;
-	border-color: #000
-}
-
-.btn-dark-fantom:hover {
-	color: #fff;
-	background-color: #000;
-	border-color: #000;
+.fantom-theme-0:hover {
+	border-color: #fff;
+	border-radius: 9px;
 	box-shadow: 0 0 0 .1rem rgba(255,255,255, 1)
 }
 
-.btn-check:focus+.btn-dark-fantom, .btn-dark-fantom:focus {
-	color: #fff;
-	background-color: #000;
+.fantom-theme-1:hover {
 	border-color: #000;
-}
-
-.btn-check:active+.btn-dark-fantom, .btn-check:checked+.btn-dark-fantom, .btn-dark-fantom.active, .btn-dark-fantom:active, .show>.btn-dark-fantom.dropdown-toggle {
-	color: #fff;
-	background-color: #000;
-	border-color: #000
-}
-
-/* .btn-check:active+.btn-dark-fantom:focus, .btn-check:checked+.btn-dark-fantom:focus, .btn-dark-fantom.active:focus, .btn-dark-fantom:active:focus, .show>.btn-dark-fantom.dropdown-toggle:focus {
-	box-shadow: 0 0 0 .1rem rgba(#13b5ecff, 1)
-} */
-
-.btn-dark-fantom.disabled, .btn-dark-fantom:disabled {
-	color: #fff;
-	background-color: #000;
-	border-color: #000
+	border-radius: 9px;
+	box-shadow: 0 0 0 .1rem rgba(255,255,255, 1)
 }

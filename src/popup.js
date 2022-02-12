@@ -4,6 +4,21 @@ var appData = {
 
 var logData = '';
 
+var themeData = [
+  {
+    id: 0,
+    name: "dark",
+    background: "#000000ff",
+    fontcolour: "#13b5ecff"
+  },
+  {
+    id: 1,
+    name: "light",
+    background: "#13b5ecff",
+    fontcolour: "#ffffffff"
+  }
+]
+
 
 
 function updateBadge() {
@@ -74,7 +89,7 @@ function setDefaultTheme()
   var x = document.getElementById("themeButton");
   chrome.storage.sync.get(['theme'], function(result) {
     if(result.theme === "" || result.theme === null){
-      chrome.storage.sync.set({"theme": "dark"});
+      chrome.storage.sync.set({"theme": 0});
     }       
   });
   setExistingTheme();
@@ -82,42 +97,48 @@ function setDefaultTheme()
 
 function setExistingTheme()
 {
-  var x = document.getElementById("themeButton");   
     chrome.storage.sync.get(['theme'], function(result) {
-      if(result.theme === "light"){
-        changeColor("#13b5ecff","#fff","dark","light","../static/logo-ftmscan.svg");           
-      } 
-      else {
-        changeColor("#000","#13b5ecff","light","dark","../static/logo-ftmscan-light.svg");
-      }     
-    });
+        changeColor(result.theme);           
+     });
 }
 
 function toggleTheme() { 
   var x = document.getElementById("themeButton");   
     chrome.storage.sync.get(['theme'], function(result) {
-      if(result.theme === "light"){
-        changeColor("#000","#13b5ecff","light","dark","../static/logo-ftmscan-light.svg","../static/refresh-icon-light.svg");
+      if(result.theme + 1 >= themeData.length){
+        changeColor(0);
         fetchGasPrice();     
       } 
       else{
-        changeColor("#13b5ecff","#fff","dark","light","../static/logo-ftmscan.svg","../static/refresh-icon-dark.svg");
+        changeColor(result.theme + 1);
         fetchGasPrice();     
       }     
     });
 }
 
-function changeColor(background,fontcolor,buttonText,theme, themeButtonSrc, refreshButtonSrc) {
+function changeColor(themeId) {
   var themeButton = document.getElementById("themeButton");
   var refreshButton = document.getElementById("refreshButton");
+  var githubLink = document.getElementById("githubLink");
   var ftmscanlogo = document.getElementById("ftmscanlogo");
-  document.body.style.background = background;
-        document.body.style.color = fontcolor;
-        themeButton.className = "btn btn-" + buttonText + "-fantom";
-        ftmscanlogo.src = themeButtonSrc;
-        refreshButton.src = refreshButtonSrc;
+  
+        document.body.style.background = themeData[themeId].background;
+        document.body.style.color = themeData[themeId].fontcolour;
+        themeButton.className = "fantom-theme-" + themeId;
+        refreshButton.className = "fantom-theme-" + themeId;
+        githubLink.className = "fantom-theme-" + themeId;
+        themeButton.src = getSvgSrc("theme", themeId);
+        ftmscanlogo.src = getSvgSrc("ftmscan", themeId);
+        refreshButton.src = getSvgSrc("refresh", themeId);
+        githubLink.src = getSvgSrc("github", themeId);
         // x.innerHTML = buttonText;
-        chrome.storage.sync.set({"theme": theme});  
+        chrome.storage.sync.set({"theme": themeId});  
+}
+
+function getSvgSrc(svgName, themeId)
+{
+  var imageDir = "../static/";
+  return imageDir + svgName + "-" + themeId + ".svg";
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -125,8 +146,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById('refreshButton').addEventListener('click', toggleTheme);
+  document.getElementById('refreshButton').addEventListener('click', fetchGasPrice);
 });
+
+
 
 function parseApiData(apiData, provider) {
   if (provider === "ftmscan") {
