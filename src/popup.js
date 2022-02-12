@@ -1,102 +1,154 @@
-function escapeHtml(html){
-    var text = document.createTextNode(html);
-    var div = document.createElement('div');
-    div.appendChild(text);
-    return div.innerHTML;
+var appData = {
+  gasData: {}
+};
+
+var logData = '';
+
+
+
+function updateBadge() {
+  chrome.storage.sync.get({
+    gasPriceOption: "fast",
+  }, function (items) {
+    const gasPrice = appData.gasData[items.gasPriceOption].gwei;
+    chrome.action.setBadgeText({ text: String(gasPrice) });
+  });
 }
 
-function selectOption(option) {
-	// Curry function with option
-	return function(e){
-		chrome.storage.sync.set({
-			'gasPriceOption': option
-		});
+function getProviderUrl(provider) {
+  switch (provider) {
+    case 'ftmscan':
+      return "https://gftm.blockscan.com/gasapi.ashx/gasoracle?apikey=key&method=gasoracle";
+      break;
+  }
+}
 
-		chrome.runtime.getBackgroundPage(backgroundPage=>{
-			backgroundPage.updateBadge();
-			updateDom();
-			addClickListeners();
-		});	
-	};
+function addToLog(logEntry) {
+  logData = logData + '<p>' + logEntry;
+  document.getElementById("logData").innerHTML = logData;
+}
+
+function fetchGasPrice() {
+
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get({
+      provider: "ftmscan",
+    }, function (items) {
+      const url = getProviderUrl(items.provider);
+
+      fetch(url).then((res) => { return res.json() })
+        .then(data => {
+          // Store the current data for the popup page
+          appData.gasData = parseApiData(data, items.provider);
+          // Update badge
+          updateBadge();
+          
+          updateDom();
+          // Resolve promise on success
+          resolve();
+        })
+        .catch((error) => {
+          reject();
+        });
+    });
+  });
+
 }
 
 function updateDom() {
-	function renderDom(data) {
-		let html = 
-		`<div class="gasprice js-gasprice" data-option="slow">
-			<span class="gasprice-label">Slow</span>
-			<span class="gasprice-number">${escapeHtml(data.gasData.slow.gwei)}</span>
-			<span class="gasprice-wait">${escapeHtml(data.gasData.slow.wait)}</span>
-		</div>`+
-		`<div class="gasprice js-gasprice" data-option="standard">
-			<span class="gasprice-label">Standard</span>
-			<span class="gasprice-number">${escapeHtml(data.gasData.standard.gwei)}</span>
-			<span class="gasprice-wait">${escapeHtml(data.gasData.standard.wait)}</span>
-		</div>`+
-		`<div class="gasprice js-gasprice" data-option="fast">
-			<span class="gasprice-label">Fast</span>
-			<span class="gasprice-number">${escapeHtml(data.gasData.fast.gwei)}</span>
-			<span class="gasprice-wait">${escapeHtml(data.gasData.fast.wait)}</span>
-		</div>`+
-		`<div class="gasprice js-gasprice" data-option="rapid">
-			<span class="gasprice-label">Rapid</span>
-			<span class="gasprice-number">${escapeHtml(data.gasData.rapid.gwei)}</span>
-			<span class="gasprice-wait">${escapeHtml(data.gasData.rapid.wait)}</span>
-		</div>`;
-
-		// Update dom
-		document.getElementsByClassName('js-popup')[0].innerHTML = DOMPurify.sanitize(html);
-		addClickListeners();
-
-		// Show selected option
-		chrome.storage.sync.get({
-			'gasPriceOption': 'standard'
-		}, (items)=>{
-			let element = document.querySelectorAll(`div[data-option='${items.gasPriceOption}']`)[0];
-			element.className += ' selected';
-		});
-	}
-
-	chrome.runtime.getBackgroundPage(backgroundPage => {
-		const data = backgroundPage.appData;
-		if(typeof data.gasData.slow !== 'undefined') {
-			renderDom(data);
-		}
-		else {
-			backgroundPage.fetchGasPrice().then(()=>{
-				updateDom(); // Let's try again after data has been fetched
-			});
-		}
-	});
-	
+  document.getElementById("ftmprice").innerHTML = 'Price: ' + appData.gasData.price.currency + appData.gasData.price.symbol + appData.gasData.price.value;
+  document.getElementById("ftmlastblock").innerHTML = 'Block: ' + appData.gasData.blockchain.lastblock;
+  document.getElementById("standardname").innerHTML = appData.gasData.standard.name;
+  document.getElementById("fastname").innerHTML = appData.gasData.fast.name;
+  document.getElementById("rapidname").innerHTML = appData.gasData.rapid.name;
+  document.getElementById("standardgwei").innerHTML = appData.gasData.standard.gwei;
+  document.getElementById("fastgwei").innerHTML = appData.gasData.fast.gwei;
+  document.getElementById("rapidgwei").innerHTML = appData.gasData.rapid.gwei;
+  document.getElementById("standardwait").innerHTML = appData.gasData.standard.wait;
+  document.getElementById("fastwait").innerHTML = appData.gasData.fast.wait;
+  document.getElementById("rapidwait").innerHTML = appData.gasData.rapid.wait;
 }
 
-function addClickListeners() {
-	// Add click listeners
-	let elements = document.getElementsByClassName('js-gasprice');
-	for(let i=0; i<elements.length; i++) {
-		const element = elements[i];
-		// Select option when clicked
-		element.addEventListener('click', selectOption(element.dataset.option));
-	}
+function setDefaultTheme()
+{
+  var x = document.getElementById("themeButton");
+  chrome.storage.sync.get(['theme'], function(result) {
+    if(result.theme === "" || result.theme === null){
+      chrome.storage.sync.set({"theme": "dark"});
+    }       
+  });
+  setExistingTheme();
 }
 
-function start() {
-	// Show latest data if we have it
-	updateDom();
-
-	// Fetch newest data upon opening
-	chrome.runtime.getBackgroundPage(backgroundPage => {
-		backgroundPage.fetchGasPrice().then(()=>{
-			updateDom(); // Let's try again after data has been fetched
-		});
-	});
-
-	// Add click listener to settings button
-	let settingsElement = document.getElementsByClassName('js-settings');
-	settingsElement[0].addEventListener('click', ()=>{
-		chrome.runtime.openOptionsPage();
-	});
+function setExistingTheme()
+{
+  var x = document.getElementById("themeButton");   
+    chrome.storage.sync.get(['theme'], function(result) {
+      if(result.theme === "light"){
+        changeColor("#13b5ecff","#fff","dark","light","../static/logo-ftmscan.svg");        
+      } 
+      else {
+        changeColor("#000","#13b5ecff","light","dark","../static/logo-ftmscan-light.svg");
+      }     
+    });
 }
 
-start();
+function toggleTheme() { 
+  var x = document.getElementById("themeButton");   
+    chrome.storage.sync.get(['theme'], function(result) {
+      if(result.theme === "light"){
+        changeColor("#000","#13b5ecff","light","dark","../static/logo-ftmscan-light.svg");
+      } 
+      else{
+        changeColor("#13b5ecff","#fff","dark","light","../static/logo-ftmscan.svg");
+      }     
+    });
+}
+
+function changeColor(background,fontcolor,buttonText,theme, imgsrc) {
+  var themeButton = document.getElementById("themeButton");
+  var ftmscanlogo = document.getElementById("ftmscanlogo");
+  document.body.style.background = background;
+        document.body.style.color = fontcolor;
+        themeButton.className = "btn btn-" + buttonText;
+        ftmscanlogo.src = imgsrc;
+        // x.innerHTML = buttonText;
+        chrome.storage.sync.set({"theme": theme});  
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('themeButton').addEventListener('click', toggleTheme);
+});
+
+function parseApiData(apiData, provider) {
+  if (provider === "ftmscan") {
+    console.log("parseApiData" + apiData);
+    return {
+      "standard": {
+        "name": "Standard",
+        "gwei": parseInt(apiData.result.SafeGasPrice),
+        "wait": "30-60 seconds"
+      },
+      "fast": {
+        "name": "Fast",
+        "gwei": parseInt(apiData.result.ProposeGasPrice),
+        "wait": "10-30 seconds"
+      },
+      "rapid": {
+        "name": "Rapid",
+        "gwei": parseInt(apiData.result.FastGasPrice),
+        "wait": "5-10 seconds"
+      },
+      "price": {
+        "value": parseFloat(apiData.result.UsdPrice),
+        "currency": "USD",
+        "symbol": "$"
+      },
+      "blockchain": {
+        "lastblock": parseInt(apiData.result.LastBlock)
+      }
+    };
+  }
+}
+fetchGasPrice();
+setDefaultTheme();

@@ -1,15 +1,17 @@
 body {
 	width: 340px;
-	background-color: #1e8def;
+	background-color: #13b5ecff;
     color: white;
     box-sizing: border-box;
     padding: 10px;
     font-family: "Helvetica";
+	border-radius: 10px;
+	border: 2px solid #eee;
 }
 
 .popup {
 	display: flex;
-	height: 65px;
+	height: 75px;
 }
 
 .settings {
@@ -57,7 +59,7 @@ body {
 }
 
 .gasprice-wait {
-	font-size: 0.55rem;
+	font-size: 0.7rem;
 	font-weight: 200;
     display: inline-block;
     text-align: center;
