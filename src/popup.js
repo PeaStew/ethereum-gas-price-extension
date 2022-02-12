@@ -42,7 +42,7 @@ function fetchGasPrice() {
           appData.gasData = parseApiData(data, items.provider);
           // Update badge
           updateBadge();
-          
+          // Update Popup
           updateDom();
           // Resolve promise on success
           resolve();
@@ -85,7 +85,7 @@ function setExistingTheme()
   var x = document.getElementById("themeButton");   
     chrome.storage.sync.get(['theme'], function(result) {
       if(result.theme === "light"){
-        changeColor("#13b5ecff","#fff","dark","light","../static/logo-ftmscan.svg");        
+        changeColor("#13b5ecff","#fff","dark","light","../static/logo-ftmscan.svg");           
       } 
       else {
         changeColor("#000","#13b5ecff","light","dark","../static/logo-ftmscan-light.svg");
@@ -97,27 +97,35 @@ function toggleTheme() {
   var x = document.getElementById("themeButton");   
     chrome.storage.sync.get(['theme'], function(result) {
       if(result.theme === "light"){
-        changeColor("#000","#13b5ecff","light","dark","../static/logo-ftmscan-light.svg");
+        changeColor("#000","#13b5ecff","light","dark","../static/logo-ftmscan-light.svg","../static/refresh-icon-light.svg");
+        fetchGasPrice();     
       } 
       else{
-        changeColor("#13b5ecff","#fff","dark","light","../static/logo-ftmscan.svg");
+        changeColor("#13b5ecff","#fff","dark","light","../static/logo-ftmscan.svg","../static/refresh-icon-dark.svg");
+        fetchGasPrice();     
       }     
     });
 }
 
-function changeColor(background,fontcolor,buttonText,theme, imgsrc) {
+function changeColor(background,fontcolor,buttonText,theme, themeButtonSrc, refreshButtonSrc) {
   var themeButton = document.getElementById("themeButton");
+  var refreshButton = document.getElementById("refreshButton");
   var ftmscanlogo = document.getElementById("ftmscanlogo");
   document.body.style.background = background;
         document.body.style.color = fontcolor;
         themeButton.className = "btn btn-" + buttonText + "-fantom";
-        ftmscanlogo.src = imgsrc;
+        ftmscanlogo.src = themeButtonSrc;
+        refreshButton.src = refreshButtonSrc;
         // x.innerHTML = buttonText;
         chrome.storage.sync.set({"theme": theme});  
 }
 
 document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('themeButton').addEventListener('click', toggleTheme);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('refreshButton').addEventListener('click', toggleTheme);
 });
 
 function parseApiData(apiData, provider) {
