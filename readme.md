@@ -1,7 +1,7 @@
 # Fantom Gas Price Extension
 Displays the latest gas price provided by [FTMScan](https://ftmscan.com/).
 
-To install TBD (Waiting for Chrome Dev approval, for now you can download this and run locally to test) <!--[click here](TBD).-->
+To install [click here](https://chrome.google.com/webstore/detail/fantom-gas-price-extensio/ejgbnkkomdnnhlegcmpjchhbmdekgbdm)
 
 ## Contributing
 Feel free to contribute any code or fork this project. If you have ideas, open up an issue or contact me via email (peastewftm@gmail.com) as well.
